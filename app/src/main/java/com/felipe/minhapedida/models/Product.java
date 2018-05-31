@@ -35,6 +35,13 @@ public class Product implements Serializable {
         this.value = value;
     }
 
+    public Product(String name, double value, Category category) {
+        this.id = id;
+        this.name = name;
+        this.value = value;
+        this.category = category;
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -69,6 +76,8 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
+        if (category == null)
+            category = new Category();
         return category.getName()+"\n"+id + ": " + name + " - R$" + value;
     }
 }

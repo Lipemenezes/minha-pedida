@@ -4,6 +4,7 @@ package com.felipe.minhapedida.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,7 +36,7 @@ public class CategoryManagementActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_management);
         db = MyORMLiteHelper.getInstance(this);
-        editName = findViewById(R.id.editNome);
+        editName = findViewById(R.id.editNameCategory);
         lvCategories = findViewById(R.id.lvCategories);
         lvCategories.setOnItemClickListener(cliqueCurto());
         lvCategories.setOnItemLongClickListener(cliqueLongo());
@@ -125,6 +126,9 @@ public class CategoryManagementActivity extends Activity {
         }
         category = null;
         editName.setText("");
+        Intent intent = new Intent();
+        intent.putExtra("hasChanges", true);
+        setResult(1010, intent);
     }
 
 }

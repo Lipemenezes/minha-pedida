@@ -135,7 +135,7 @@ public class ProductManagementActivity extends Activity {
     }
 
 
-    public void salvar(View v) throws SQLException {
+    public void save(View v) throws SQLException {
         if (product ==null) {
             product = new Product();
             product.setName(editName.getText().toString());
@@ -161,12 +161,29 @@ public class ProductManagementActivity extends Activity {
         editValue.setText("");
         spCategories.setSelection(0);
         editName.requestFocus();
+        Intent intent = new Intent();
+        intent.putExtra("hasChanges", true);
+        setResult(1010, intent);
     }
 
 
-    public void gerenciarCategory(View v){
-        Intent it = new Intent(this, ProductManagementActivity.class);
-        startActivity(it);
+    public void manageCategory(View v){
+        Intent it = new Intent(this, CategoryManagementActivity.class);
+        startActivityForResult(it, 2000);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2000 &&
+                resultCode == 2020 &&
+                data.getBooleanExtra("hasChanges", false)) {
+            try {
+                loadSpinner();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -178,4 +195,5 @@ public class ProductManagementActivity extends Activity {
             e.printStackTrace();
         }
     }
+
 }

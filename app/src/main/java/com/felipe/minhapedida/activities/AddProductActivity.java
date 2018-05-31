@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
+import com.felipe.minhapedida.models.Category;
 import com.felipe.minhapedida.models.Item;
 import com.felipe.minhapedida.MyORMLiteHelper;
 import com.felipe.minhapedida.models.Product;
@@ -42,7 +43,17 @@ public class AddProductActivity extends Activity {
 
     public void manageProduct(View v){
         Intent it = new Intent(this, ProductManagementActivity.class);
-        startActivity(it);
+        startActivityForResult(it, 1000);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000 &&
+                resultCode == 1010 &&
+                data.getBooleanExtra("hasChanges", false)) {
+            fillSpinner();
+        }
     }
 
     public void fillSpinner() {
@@ -60,12 +71,17 @@ public class AddProductActivity extends Activity {
     }
 
     public void setProducts() throws SQLException {
-        Product prod1 = new Product("Refrigerante", 3.50);
-        Product prod2 = new Product("Cerveja", 5.00);
-        Product prod3 = new Product("Batata Frita", 10.00);
-        Product prod4 = new Product("Água", 2.50);
-        Product prod5 = new Product("Pastel", 3.50);
-        Product prod6 = new Product("Petiscos", 6.00);
+        Category ctFood = new Category("Comida");
+        Category ctDrink = new Category("Bebida");
+        db.getCategoryDao().create(ctFood);
+        db.getCategoryDao().create(ctDrink);
+
+        Product prod1 = new Product("Refrigerante", 3.50, ctDrink);
+        Product prod2 = new Product("Cerveja", 5.00, ctDrink);
+        Product prod3 = new Product("Batata Frita", 10.00, ctFood);
+        Product prod4 = new Product("Água", 2.50, ctDrink);
+        Product prod5 = new Product("Pastel", 3.50, ctFood);
+        Product prod6 = new Product("Petiscos", 6.00, ctFood);
 
         db.getProductDao().create(prod1);
         db.getProductDao().create(prod2);

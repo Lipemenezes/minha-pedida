@@ -47,9 +47,9 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void addProduto(View v){
+    public void addProduct(View v){
         Intent it = new Intent(this, AddProductActivity.class);
-        startActivityForResult(it, RESULT_FIRST_USER);
+        startActivityForResult(it, REQUEST_ADD_PRODUCT);
     }
 
     @Override
