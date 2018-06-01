@@ -9,9 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.felipe.minhapedida.MyORMLiteHelper;
 import com.felipe.minhapedida.models.Item;
 import com.felipe.minhapedida.R;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
@@ -20,13 +22,22 @@ public class MainActivity extends Activity {
     ArrayList<Item> listItems;
     ArrayAdapter<Item> adapterItems;
     Item item;
+    MyORMLiteHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         lvItems = findViewById(R.id.lvItems);
+        db = MyORMLiteHelper.getInstance(this);
+
+        adapterItems = new ArrayAdapter<Item>(
+                this,
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1,
+                listItems
+        );
+
         //Clique curto
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -56,18 +67,43 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && requestCode== REQUEST_ADD_PRODUCT){
-            item = (Item) data.getSerializableExtra("itemEscolhido");
+            item = (Item) data.getSerializableExtra("selectedItem");
+
+            int itemIndex = 0;
+            for (int i = 0; i < listItems.size(); i++) {
+                if (listItems.get(i).getId() == item.getId()) {
+                    listItems.get(i).setQuantity(item.getQuantity());
+                    itemIndex = i;
+                    try {
+                        db.getItemDao().update(listItems.get(i));
+                    }  catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            if (itemIndex == 0) {
+                try {
+                    listItems.add(item);
+                    db.getItemDao().create(item);
+                }  catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
             //Adicionar um item no listView e no db
             //Desenvolver
-
-
-        }else if(resultCode ==  RESULT_CANCELED){
+        } else if(resultCode ==  RESULT_CANCELED) {
             Toast.makeText(this, "Cancelou", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void clearList(View v){
-        //Desenvolver
+    public void clearList(View v) {
+        try {
+            db.getItemDao().delete(listItems);
+        }  catch (SQLException e) {
+            e.printStackTrace();
+        }
+        listItems = new ArrayList<Item>();
     }
 
 

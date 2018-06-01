@@ -142,7 +142,7 @@ public class ProductManagementActivity extends Activity {
             product.setValue(Double.parseDouble(editValue.getText().toString()));
             product.setCategory((Category) spCategories.getSelectedItem());
             long res = db.getProductDao().create(product);
-            if(res != -1) {
+            if (res != -1) {
                 adapterProduct.add(product);
                 Toast.makeText(this, "Cadastrado"+res, Toast.LENGTH_SHORT).show();
             }

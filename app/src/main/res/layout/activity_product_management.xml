@@ -24,13 +24,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/spCategories"
             ></Spinner>
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_search"
-            android:onClick="findProduct"
-            />
+        <!--<ImageButton-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@android:drawable/ic_menu_search"-->
+            <!--android:onClick="findProduct"-->
+            <!--/>-->
         <Button
             android:layout_width="0dp"
             android:layout_weight="1"
