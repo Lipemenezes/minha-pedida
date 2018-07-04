@@ -67,11 +67,8 @@ public class Item implements Serializable {
         this.product = produto;
     }
 
-    public double getSubtotal(){
-        return quantity * value;
-    }
     @Override
     public String toString() {
-        return getProduct().getName() + " - " + value + " - " + quantity + " - " + getSubtotal();
+        return getProduct().getName() + " - " + value + " - " + quantity + " - " + getValue();
     }
 }

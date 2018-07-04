@@ -16,6 +16,7 @@ import com.felipe.minhapedida.R;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class AddProductActivity extends Activity {
@@ -91,9 +92,26 @@ public class AddProductActivity extends Activity {
         db.getProductDao().create(prod6);
     }
 
-    public void send(View v){
+    public void send(View v) {
         Item item = new Item();
-        //Desenvolver
+        Product product = (Product) spProducts.getSelectedItem();
+        item.setProduct(product);
+        item.setQuantity(npQuantity.getValue());
+        item.setValue(product.getValue() * npQuantity.getValue());
+
+        try {
+            List<Item> itemDb = db.getItemDao().queryBuilder().where()
+                    .eq("product_id", product).query();
+            if (itemDb.size() > 0){
+                item.setId(itemDb.get(0).getId());
+                db.getItemDao().update(item);
+            } else {
+                db.getItemDao().create(item);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         finish();
     }
